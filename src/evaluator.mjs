@@ -412,6 +412,9 @@ function* Inner_Evaluate_Expression(Expression) {
     case isExpressionWithComma(Expression):
       return yield* Evaluate_ExpressionWithComma(Expression);
 
+    case Expression.type === 'DoExpression':
+      return yield* Evaluate_BlockStatement(Expression.body);
+
     default:
       throw outOfRange('Evaluate_Expression', Expression);
   }

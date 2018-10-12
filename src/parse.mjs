@@ -4,6 +4,16 @@ const Parser = acorn.Parser.extend((P) => class Parse262 extends P {
   constructor(options, source) {
     super({ ...options, ecmaVersion: 2019 }, source);
   }
+
+  parseExprAtom(...args) {
+    if (this.type === acorn.tokTypes._do) {
+      this.eat(acorn.tokTypes._do);
+      const node = this.startNode();
+      node.body = this.parseBlock();
+      return this.finishNode(node, 'DoExpression');
+    }
+    return super.parseExprAtom(...args);
+  }
 });
 
 function deepFreeze(obj) {
